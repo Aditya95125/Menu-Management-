@@ -5,22 +5,25 @@ namespace App\Http\Controllers;
 use App\Models\Menu;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use PhpParser\Node\Stmt\Return_;
+
 
 class MenuController extends Controller
 {
+    public function showAll()
+{
+    // Inertia page that will fetch from /api/menus
+    return Inertia::render('menus/All');
+}
 
-    public function getall(){
-        $menus = Menu::with('childrenRecursive')
-        ->orderBy('id')  
-        ->paginate('5');
-
-        return response()->json($menus);
+    public function getall()
+    {
+       return Menu::paginate(3);
+        // return response()->json($menus);
     }
 
     public function index()
     {
-        $menus = Menu::with('childrenRecursive') //childrenRecursive
+        $menus = Menu::with('childrenRecursive') //children
             ->whereNull('parent_id')
             ->orderBy('sort_number')
             ->get();
